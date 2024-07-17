@@ -1,38 +1,266 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  min-height: 100vh; 
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.header {
+  background-color: #252250;
   color: white;
+  text-align: center;
+  padding: 20px;
+  flex-shrink: 0;
 }
 
-.App-link {
-  color: #61dafb;
+.footer {
+  background-color: #252250;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  flex-shrink: 0;
+  width: 100%;
+  position: relative; 
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center; 
+  padding: 20px;
+  box-sizing: border-box;
+  width: 100%; 
+  position: relative;
+  min-height: calc(100vh - 160px); 
+}
+
+.sunny main {
+  background-color: #ebece6;
+}
+
+.cloudy main {
+  background-color: #b3c9d1;
+}
+
+.rainy main {
+  background-color: #7c87a2;
+}
+
+.default main {
+  background-color: #c2dded;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  z-index: 1; /* 确保搜索框在下拉菜单之上 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+input[type="text"]:focus {
+  border-color: #4A90E2;
+  outline: none;
+}
+
+button {
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  background-color: #4A90E2;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #357ABD;
+}
+
+.autocomplete {
+  position: relative;
+  width: 100%;
+}
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  border: 1px solid #ddd;
+  border-top: none;
+  max-height: 90px; /* 限制显示三个项目的高度 */
+  overflow-y: auto;
+  background-color: white;
+  width: 100%;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  z-index: 2;
+}
+
+.suggestions li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestions li:hover {
+  background-color: #f1f1f1;
+}
+
+
+.weather-info {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 400px; 
+  margin: auto;
+  z-index: 2;
+  padding: 25px 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  color: white;
+  background-size: cover;
+  background-position: center;
+}
+
+.weather-info.sunny {
+  background-image: url('../public/sunny.gif');
+}
+
+.weather-info.cloudy {
+  background-image: url('../public/cloudy.gif');
+}
+
+.weather-info.rainy {
+  background-image: url('../public/rainy.webp');
+}
+
+.weather-info.default {
+  background-image: url('../public/default.jpg');
+}
+
+.weather-info h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.weather-info .description {
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+.weather-info .temperature {
+  font-size: 72px;
+  font-weight: bold;
+  margin: 20px 0;
+  align-self: flex-end; 
+}
+
+.weather-info .details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.weather-info .details .label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.weather-info .details .value {
+  font-weight: normal;
+}
+
+
+.details-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  width: 100%; 
+}
+
+.details-item {
+  margin-bottom: 20px;
+}
+
+
+.weather-icon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+}
+
+
+.tagline {
+  font-weight: bold;
+  text-align: center;
+  margin: 10px 0; 
+}
+
+
+@media (max-width: 600px) {
+  .weather-info {
+    padding: 20px;
+    width: 90%; 
   }
-  to {
-    transform: rotate(360deg);
+
+  .weather-info .temperature {
+    font-size: 48px; 
+  }
+
+  .weather-info h2 {
+    font-size: 20px; 
+  }
+
+  .weather-info .description {
+    font-size: 14px;
+  }
+
+  .weather-info .details .label,
+  .weather-info .details .value {
+    font-size: 14px; 
+  }
+
+  form {
+    flex-direction: column; 
+    width: 100%;
+  }
+
+  input[type="text"], button {
+    width: 100%; 
+    margin: 5px 0; 
   }
 }
