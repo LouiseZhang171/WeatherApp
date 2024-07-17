@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './App.css'; 
-const GeoNamesUsername = 'louisezhang'; 
+import './App.css';
+
+const GeoNamesUsername = 'louisezhang';
 
 const CityAutocomplete = ({ onCitySelect, onCountrySelect }) => {
   const [inputValue, setInputValue] = useState('');
@@ -9,26 +10,27 @@ const CityAutocomplete = ({ onCitySelect, onCountrySelect }) => {
 
   useEffect(() => {
     const fetchCities = async (query) => {
-      const isZipCode = /^\d+$/.test(query); 
+      if (!query) {
+        setSuggestions([]);
+        return;
+      }
+
+      const isZipCode = /^\d+$/.test(query); // 判断是否为邮政编码
       const params = {
         maxRows: 10,
         username: GeoNamesUsername,
+        ...(isZipCode ? { postalcode: query } : { placename: query })
       };
 
-      if (isZipCode) {
-        params.postalcode = query;
-      } else {
-        params.placename = query;
-      }
-
       try {
-        const response = await axios.get('http://api.geonames.org/postalCodeSearchJSON', { params });
+        const response = await axios.get('https://secure.geonames.org/postalCodeSearchJSON', { params });
         const cities = response.data.postalCodes
           .filter(city => isZipCode || city.placeName.toLowerCase().startsWith(query.toLowerCase())) // 过滤结果
           .map(city => ({
             name: city.placeName,
             country: city.countryCode
           }));
+
         // 去除重复的城市名称
         const uniqueCities = cities.filter((city, index, self) =>
           index === self.findIndex((c) => (
@@ -56,7 +58,7 @@ const CityAutocomplete = ({ onCitySelect, onCountrySelect }) => {
     setInputValue(city.name);
     onCitySelect(city.name);
     onCountrySelect(city.country);
-    setSuggestions([]); 
+    setSuggestions([]);
   };
 
   return (
